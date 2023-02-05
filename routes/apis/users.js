@@ -4,6 +4,8 @@ const { validationResult, check } = require("express-validator");
 const User = require("../../models/User");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 //@route  api/users
 //@desc   test routes
 //@access public
@@ -24,7 +26,7 @@ router.post(
     }
     const { name, email, password } = req.body;
     try {
-      let user =await User.findOne({ email });
+      let user = await User.findOne({ email });
       // check whether user already exists
       if (user) {
         return res
@@ -49,9 +51,21 @@ router.post(
       // to save user in db
       await user.save();
       // Json webtoken
-
-      console.log(req.body);
-      res.send("User Register Successfully...");
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (error, token) => {
+          if (error) throw error;
+          res.json({ token });
+        }
+      );
+   
     } catch (error) {}
   }
 );
