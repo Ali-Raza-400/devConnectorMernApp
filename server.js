@@ -5,6 +5,8 @@ const connectDB = require("./config/db");
 connectDB();
 // port
 const PORT = 5000;
+// init parser(for running console in terminal)
+app.use(express.json({extended:false}))
 // routes
 app.use("/api/user", require("./routes/apis/users"));
 app.use("/api/auth", require("./routes/apis/auth"));
