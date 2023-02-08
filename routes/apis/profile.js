@@ -96,5 +96,36 @@ router.post(
     }
   }
 );
+//@route  api/profile
+//@desc   get all the Profile
+//@access Public
+
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+//@route  api/profile/user/:user_id
+//@desc   get single User Id
+//@access Public
+
+router.get("/user/:user_id", async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id,
+    }).populate("user", ["name", "avatar"]);
+    if (!profile) {
+      res.status(500).json({ msg: "Profile not found" });
+    }
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;
