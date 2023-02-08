@@ -107,7 +107,7 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
-  }
+  } 
 });
 //@route  api/profile/user/:user_id
 //@desc   get single User Id
