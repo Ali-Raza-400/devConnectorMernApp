@@ -1,4 +1,6 @@
 {
     "MONGO_URL": "mongodb+srv://ali:aliali@devcon.jonuhed.mongodb.net/DevCon?retryWrites=true&w=majority",
-    "jwtSecret":"JwtSecretKey"
+    "jwtSecret":"JwtSecretKey",
+    "githubClientId":"48556639670bb917f228",
+    "githubSecret":"dc929ad4e82dcfcf9b830cccbb84ae1b6c677f22"
 }
