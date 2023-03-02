@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const Post = require("../../models/posts");
 const auth = require("../../middleware/auth");
 const config = require("config");
 const request = require("request");
@@ -13,7 +14,7 @@ router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id }).populate(
       "user",
-      ["name", "avatar","email"]
+      ["name", "avatar", "email"]
     );
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for the user" });
@@ -135,6 +136,7 @@ router.get("/user/:user_id", async (req, res) => {
 
 router.delete("/", auth, async (req, res) => {
   try {
+    await Post.deleteMany({ user: req.user.id });
     await Profile.findOneAndRemove({ user: req.user.id });
     await User.findOneAndRemove({ _id: req.user.id });
     res.json({ msg: "User Deleted" });
@@ -267,7 +269,7 @@ router.get("/github/:username", async (req, res) => {
     request(options, (error, response, body) => {
       if (error) console.error(error);
       if (response.statusCode == !200) {
-      return  res.status(404).json({ msg: "No github profile found" });
+        return res.status(404).json({ msg: "No github profile found" });
       }
       res.json(JSON.parse(body));
     });
